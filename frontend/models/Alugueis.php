@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use DateTime;
 
 /**
  * This is the model class for table "alugueis".
@@ -57,6 +58,16 @@ class Alugueis extends \yii\db\ActiveRecord
             'preco_final' => 'Preço',
             'status' => 'Status',
         ];
+    }
+
+    public function beforeSave($insert) {
+        $dataInicio = DateTime::createFromFormat('d/m/Y', $this->data_inicio);
+        $dataFim = DateTime::createFromFormat('d/m/Y', $this->data_fim);
+    
+        $this->data_inicio = $dataInicio->format('Y-m-d');
+        $this->data_fim = $dataFim->format('Y-m-d');
+    
+        return parent::beforeSave($insert);
     }
 
     /**

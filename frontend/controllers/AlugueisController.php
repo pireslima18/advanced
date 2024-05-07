@@ -107,14 +107,12 @@ class AlugueisController extends Controller
                     return "Idade insuficiente para alugar $objetoFilme->nome.";
                 }
             }
-            
-            //Capturar Data e diferença de data
-            $dataAtual = date('Y-m-d');
 
-            $dataInicio = $this->request->post('Alugueis')['data_inicio'];
-            $dataFim = $this->request->post('Alugueis')['data_fim'];
-            $dataTime1 = new DateTime($dataInicio);
-            $dataTime2 = new DateTime($dataFim);
+            $dataInicio = DateTime::createFromFormat('d/m/Y', $this->request->post('Alugueis')['data_inicio']);
+            $dataFim = DateTime::createFromFormat('d/m/Y', $this->request->post('Alugueis')['data_fim']);
+            
+            $dataTime1 = new DateTime($dataInicio->format('Y-m-d'));
+            $dataTime2 = new DateTime($dataFim->format('Y-m-d'));
             
             $diferencaDias = ($dataTime1->diff($dataTime2))->days + 1;
             
@@ -199,19 +197,28 @@ class AlugueisController extends Controller
      */
     public function actionDelete($id)
     {
-        // Somar total da lista de filmes alugados do cliente
         $objetoCliente = Clientes::findOne($this->findModel($id)->id_cliente);
-        $objetoCliente->filmes_alugados -= 1;
-        $objetoCliente->save();
         
-        // Alterar status do filme
-        $objetoFilme = Filmes::findOne($this->findModel($id)->id_filmes);
-        $objetoFilme->status = 'Disponível';
-        $objetoFilme->save();
+        $filmesAlugadosArray = FilmesAlugados::find()->where(['id_aluguel' => $id])->all();
+        foreach($filmesAlugadosArray as $filmeAlugado){
+            // Retirar filme do cliente
+            $objetoCliente->filmes_alugados -= 1;
+            $objetoCliente->save();
+            // Alterar status do filme
+            $objetoFilme = Filmes::findOne($filmeAlugado->id_filme);
+            $objetoFilme->status = 'Disponível';
+            $objetoFilme->save();
+            $filmeAlugado->delete();
+        }
         
-        $this->findModel($id)->delete();
+        if($this->findModel($id)->delete()){
+            Yii::$app->session->setFlash('success', 'Registro apagado com sucesso!');
+        }else{
+            Yii::$app->session->setFlash('error', 'Não foi possível apagar esse aluguel pois ainda há registros vinculados a ele.');
+        }
 
         return $this->redirect(['index']);
+        
     }
 
     /**

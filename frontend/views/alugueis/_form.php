@@ -40,13 +40,13 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'data_inicio')->widget(DatePicker::classname(), [
         'language' => 'pt',
-        'dateFormat' => 'yyyy/MM/dd',
+        'dateFormat' => 'dd/MM/yyyy',
         'options' => ['class' => 'form-control', 'autocomplete' => 'off']
     ]); ?>
 
     <?= $form->field($model, 'data_fim')->widget(DatePicker::classname(), [
         'language' => 'pt',
-        'dateFormat' => 'yyyy/MM/dd',
+        'dateFormat' => 'dd/MM/yyyy',
         'options' => ['class' => 'form-control', 'autocomplete' => 'off']
     ]); ?>
 

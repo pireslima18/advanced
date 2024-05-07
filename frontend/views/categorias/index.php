@@ -92,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-<?php
+    <?php
         $script = <<< JS
 
         $('.modelEditButton').click(function (e){

@@ -36,6 +36,20 @@ $this->params['breadcrumbs'][] = $this->title;
         Modal::end();
     ?>
     <!-- End Modal -->
+
+    <?php if (Yii::$app->session->hasFlash('error')): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?= Yii::$app->session->getFlash('error') ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
+    <?php if (Yii::$app->session->hasFlash('success')): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?= Yii::$app->session->getFlash('success') ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
     
     <?php Pjax::begin(['id'=>'alugueisGrid']); ?>
     <?= GridView::widget([
@@ -105,16 +119,31 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filterOptions' => ['class' => 'd-none']
             ],
             [
-                'format' => 'raw',
-                'value' => function($model) {
-                    return Html::a('Confirmar Devolução', ['registrar-devolucao', 'id' => $model->id], [
-                        'class' => 'btn btn-success',
-                        'data' => [
-                            'confirm' => 'Deseja marcar esse item como devolvido?',
-                            'method' => 'post',
-                        ],
-                    ]);
-                }
+                'class' => ActionColumn::className(),
+                'template' => '{edit} {delete}',
+                'contentOptions' => ['class' => 'text-center'],
+                'buttons' => [
+                    'edit' => function ($url, $model, $key) {
+                        return Html::a(
+                            'Confirmar devolução',
+                            ['registrar-devolucao', 'id' => $model->id],
+                            ['title' => 'Editar', 'id' => 'edit_' . $model->id, 'class' => 'modelEditButton btn btn-success']
+                        );
+                    },
+                    'delete' => function ($url, $model, $key) {
+                        return Html::a(
+                            'Apagar',
+                            ['delete', 'id' => $model->id],
+                            [
+                                'title' => 'Deletar',
+                                'id' => 'delete_' . $model->id,
+                                'data-confirm' => 'Tem certeza de que deseja excluir este item?',
+                                'data-method' => 'post',
+                                'class' => 'btn btn-danger'
+                            ]
+                        );
+                    },
+                ],
             ],
         ],
     ]); ?>

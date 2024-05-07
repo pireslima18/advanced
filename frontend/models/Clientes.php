@@ -53,6 +53,11 @@ class Clientes extends \yii\db\ActiveRecord
         ];
     }
 
+    public function beforeSave($insert) {
+        $this->data_nascimento = date('Y-m-d', strtotime($this->data_nascimento));
+        return parent::beforeSave($insert);
+    }
+
     // Função para calcular idade do cliente
     public function obterIdadeCliente($cliente){
         // Data de nascimento do cliente
