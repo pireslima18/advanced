@@ -72,6 +72,11 @@ class ClientesController extends Controller
     {
         $model = new Clientes();
 
+        // if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+        //     Yii::$app->response->format = 'json';
+        //     return \yii\widgets\ActiveForm::validate($model);
+        // }
+
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
                 // return $this->redirect(['view', 'id' => $model->id]);

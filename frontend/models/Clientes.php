@@ -35,6 +35,7 @@ class Clientes extends \yii\db\ActiveRecord
             [['nome'], 'string', 'max' => 40],
             [['email'], 'string', 'max' => 50],
             [['telefone'], 'string', 'max' => 20],
+            ['data_nascimento', 'checkDate'],
         ];
     }
 
@@ -56,6 +57,16 @@ class Clientes extends \yii\db\ActiveRecord
     public function beforeSave($insert) {
         $this->data_nascimento = date('Y-m-d', strtotime($this->data_nascimento));
         return parent::beforeSave($insert);
+    }
+
+    public function checkDate($attribute, $params){
+        $dataAtual = date('d-m-y');
+        $dataAtual;
+        $diaSelecionado = date('d-m-y', strtotime($this->$attribute));
+    
+        if($diaSelecionado != $dataAtual){
+            $this->addError($attribute, 'A data de nascimento deve ser posterior à data atual.');
+        }
     }
 
     // Função para calcular idade do cliente

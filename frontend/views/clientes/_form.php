@@ -17,7 +17,11 @@ use yii\jui\DatePicker;
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'autocomplete' => 'off']); ?>
 
-    <?= $form->field($model, 'telefone')->textInput(['maxlength' => true, 'id' => 'telefone', 'autocomplete' => 'off']); ?>
+    <?= $form->field($model, 'telefone')->textInput([
+        'maxlength' => true,
+        'id' => 'telefone',
+        'autocomplete' => 'off'
+    ]) ?>
 
     <?= $form->field($model, 'data_nascimento')->widget(DatePicker::classname(), [
         'language' => 'pt',
@@ -58,6 +62,59 @@ use yii\jui\DatePicker;
             });
             return false;
         })
+
+        $('#telefone').on('input', function (e) {
+            var telefone = $(this).val().replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+
+            var telefoneFormatado = '';
+
+            if (telefone.length > 0) {
+                telefoneFormatado += '(' + telefone.substring(0, 2); // Adiciona os primeiros dois dígitos
+            }
+
+            if (telefone.length > 2) {
+                telefoneFormatado += ') ' + telefone.substring(2, 3); // Adiciona o terceiro dígito
+            }
+
+            if (telefone.length > 3) {
+                telefoneFormatado += ' ' + telefone.substring(3, 7); // Adiciona os próximos quatro dígitos
+            }
+
+            if (telefone.length > 7) {
+                telefoneFormatado += '-' + telefone.substring(7, 11); // Adiciona os últimos quatro dígitos
+            }
+
+            $(this).val(telefoneFormatado);
+        });
+
+        // Para permitir a exclusão dos caracteres
+        $('#telefone').on('keydown', function (e) {
+            var key = e.keyCode || e.charCode;
+
+            // Permitir a exclusão apenas se estiver apagando caracteres formatados
+            if (key === 8 || key === 46) {
+                var telefone = $(this).val().replace(/\D/g, '');
+                var telefoneFormatado = '';
+
+                if (telefone.length > 0) {
+                    telefoneFormatado += '(' + telefone.substring(0, 2); // Adiciona os primeiros dois dígitos
+                }
+
+                if (telefone.length > 2) {
+                    telefoneFormatado += ') ' + telefone.substring(2, 3); // Adiciona o terceiro dígito
+                }
+
+                if (telefone.length > 3) {
+                    telefoneFormatado += ' ' + telefone.substring(3, 7); // Adiciona os próximos quatro dígitos
+                }
+
+                if (telefone.length > 7) {
+                    telefoneFormatado += '-' + telefone.substring(7, 11); // Adiciona os últimos quatro dígitos
+                }
+
+                $(this).val(telefoneFormatado);
+            }
+        });
 
     JS;
     $this->registerJs($script);
