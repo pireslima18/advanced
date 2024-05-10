@@ -55,7 +55,9 @@ class Clientes extends \yii\db\ActiveRecord
     }
 
     public function beforeSave($insert) {
-        $this->data_nascimento = date('Y-m-d', strtotime($this->data_nascimento));
+        $date = DateTime::createFromFormat('d/m/Y', $this->data_nascimento);
+        $this->data_nascimento = $date->format('Y-m-d');
+        
         return parent::beforeSave($insert);
     }
 
@@ -64,7 +66,7 @@ class Clientes extends \yii\db\ActiveRecord
         $dataAtual;
         $diaSelecionado = date('d-m-y', strtotime($this->$attribute));
     
-        if($diaSelecionado != $dataAtual){
+        if($diaSelecionado > $dataAtual){
             $this->addError($attribute, 'A data de nascimento deve ser posterior à data atual.');
         }
     }

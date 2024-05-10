@@ -111,7 +111,8 @@ class ClientesController extends Controller
                 // return $this->redirect(['view', 'id' => $model->id]);
                 echo 'Success';
             }else{
-                echo 'Error';
+                Yii::$app->session->setFlash('error', implode(', ', $model->getFirstErrors()));
+                // echo 'Error';
             }
         }else{
             return $this->renderAjax('update', [

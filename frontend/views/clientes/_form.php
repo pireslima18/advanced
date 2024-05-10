@@ -9,9 +9,17 @@ use yii\jui\DatePicker;
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
+
 <div class="clientes-form">
 
     <?php $form = ActiveForm::begin(['id'=>$model->formName()]); ?>
+    
+    <?php if (Yii::$app->session->hasFlash('error')): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?= Yii::$app->session->getFlash('error') ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
 
     <?= $form->field($model, 'nome')->textInput(['maxlength' => true, 'autocomplete' => 'off']); ?>
 
@@ -55,7 +63,8 @@ use yii\jui\DatePicker;
                     $(document).find('#modalCreate').modal('hide');
                     $.pjax.reload({container:'#clientesGrid'});
                 }else{
-                    $("#message").html(result);
+                    $("#statusError").removeClass('d-none');
+                    $("#statusError").html(result);
                 }
             }).fail(function(){
                 console.log('Server error');
