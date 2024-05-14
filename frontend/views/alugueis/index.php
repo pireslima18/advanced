@@ -72,7 +72,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     ['class' => 'form-control', 'prompt' => 'Todos']
                 ),
             ],
-            ['label'=>'Filmes',
+            [
+            'label'=>'Filmes',
             'value' => function ($data) 
                 {
                     $arr = FilmesAlugados::find()->select('id_filme')->where(['id_aluguel'=>$data->id])->all();

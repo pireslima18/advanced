@@ -2,8 +2,21 @@
 
 /** @var yii\web\View $this */
 
+use yii\helpers\Url;
+
 $this->title = 'My Yii Application';
+
+$imageUrl = Url::to('@web/uploads/images.jpg');
+
 ?>
+
+<style>
+    .card-img-top {
+        height: 400px; /* Defina a altura desejada para as imagens */
+        object-fit: cover; /* Ajusta a imagem para cobrir a área designada */
+    }
+</style>
+
 <div class="site-index">
     <div class="p-5 mb-4 bg-transparent rounded-3">
         <div class="container-fluid py-5 text-center">
@@ -14,36 +27,23 @@ $this->title = 'My Yii Application';
 
     <div class="body-content">
 
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Controle de Clientes</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Controle de Filmes</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Clientes Devedores</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+        <div class="container">
+            <div class="row">
+                <?php foreach($filmesModel as $filme){ ?>
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="<?= Url::to('@web/' . $filme->logo) ?>" class="card-img-top" alt="<?= $filme->nome ?>">
+                            <div class="card-body">
+                                <img src="<?= Url::to('@web/' . $filme->classificacao->imagem_classificacao) ?>" class="img-fluid" width = "13px" height = "13px" alt="<?= $filme->nome ?>">
+                                <h5 class="card-title"><?= $filme->nome ?></h5>
+                                <p>Categoria: Ação</p>
+                                <p>Classificação: L</p>
+                                <p>Valor diária: R$ 10.45</p>
+                                <a href="#" class="btn btn-primary">Alugar</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
             </div>
         </div>
 

@@ -12,6 +12,8 @@ use Yii;
  */
 class Classificacoes extends \yii\db\ActiveRecord
 {
+    public $file;
+
     /**
      * {@inheritdoc}
      */
@@ -28,6 +30,7 @@ class Classificacoes extends \yii\db\ActiveRecord
         return [
             [['classificacao'], 'required'],
             [['classificacao'], 'string', 'max' => 10],
+            [['file'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg'],
         ];
     }
 
@@ -39,6 +42,7 @@ class Classificacoes extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'classificacao' => 'Classificacao',
+            'file' => 'Logo',
         ];
     }
 }

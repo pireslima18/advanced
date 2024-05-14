@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
+use frontend\models\Filmes;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
@@ -75,7 +76,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $filmes = Filmes::find()
+            ->where(['not', ['logo' => null]])
+            ->with('classificacao')
+            ->all();                                  
+
+        return $this->render('index', ['filmesModel' => $filmes]);
     }
 
     /**

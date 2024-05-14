@@ -47,7 +47,7 @@ class FilmesSearch extends Filmes
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-        ]);
+        ]);        
 
         $this->load($params);
 

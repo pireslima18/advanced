@@ -17,6 +17,9 @@ use Yii;
  */
 class Filmes extends \yii\db\ActiveRecord
 {
+
+    public $file;
+
     /**
      * {@inheritdoc}
      */
@@ -36,9 +39,21 @@ class Filmes extends \yii\db\ActiveRecord
             [['valor_dia'], 'number'],
             [['status'], 'string'],
             [['nome'], 'string', 'max' => 40],
+            [['logo'], 'string', 'max' => 200],
+            [['file'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg'],
             [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categorias::class, 'targetAttribute' => ['categoria_id' => 'id']],
             [['classificacao_id'], 'exist', 'skipOnError' => true, 'targetClass' => Classificacoes::class, 'targetAttribute' => ['classificacao_id' => 'id']],
         ];
+    }
+
+    public function upload()
+    {
+        if ($this->file->saveAs('uploads/' . $this->file->baseName . '.' . $this->file->extension, false)) {
+            // $this->file->saveAs('uploads/' . $this->file->baseName . '.' . $this->file->extension);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -53,6 +68,7 @@ class Filmes extends \yii\db\ActiveRecord
             'classificacao_id' => 'Classificação',
             'valor_dia' => 'Valor Dia',
             'status' => 'Status',
+            'file' => 'Logo',
         ];
     }
 

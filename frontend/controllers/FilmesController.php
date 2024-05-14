@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\widgets\ActiveForm;
+use yii\web\UploadedFile;
 use Yii;
 
 
@@ -74,15 +75,36 @@ class FilmesController extends Controller
     {
         $model = new Filmes();
 
+        // if (Yii::$app->request->isPost) {
+        //     $model->file = UploadedFile::getInstance($model, 'file');
+        //     if ($model->upload()) {
+        //         // file is uploaded successfully
+        //         return;
+        //     }
+        // }
+
+        // echo "die";
+        // die;
+
         // if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
         //     Yii::$app->response->format = Response::FORMAT_JSON;;
         //     return ActiveForm::validate($model);
         // }
 
+        
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($model->load($this->request->post()) /*&& $model->save()*/) {
+                $model->file = UploadedFile::getInstance($model, 'file');
+                $imageName = $model->nome;
+                if($model->file->saveAs('uploads/' . $imageName . '.' . $model->file->extension, false)){
+                    $model->logo = 'uploads/' . $imageName . '.' . $model->file->extension;
+                }
+                if($model->save('false')){
+                    echo 'Success';
+                }else{
+                    echo 'Error';
+                }
                 // return $this->redirect(['view', 'id' => $model->id]);
-                echo 'Success';
             } else {
                 echo 'Error';
                 // return $this->render('create', [
@@ -110,9 +132,18 @@ class FilmesController extends Controller
         $model = $this->findModel($id);
 
         if($this->request->isPost){
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($model->load($this->request->post()) /*&& $model->save()*/) {
+                $model->file = UploadedFile::getInstance($model, 'file');
+                $imageName = $model->nome;
+                if($model->file->saveAs('uploads/' . $imageName . '.' . $model->file->extension, false)){
+                    $model->logo = 'uploads/' . $imageName . '.' . $model->file->extension;
+                }
+                if($model->save()){
+                    echo 'Success';
+                }else{
+                    echo 'Error';
+                }
                 // return $this->redirect(['view', 'id' => $model->id]);
-                echo 'Success';
             }else{
                 echo 'Error';
             }
@@ -136,6 +167,9 @@ class FilmesController extends Controller
         $devolucoesArray = Devolucoes::find()->where(['id_filme'=>$id])->all();
 
         if($this->findModel($id)->status === 'Disponível' && count($filmesAlugadosArray) === 0 && count($devolucoesArray) === 0){
+            if($this->findModel($id)->logo !== null){
+                unlink($this->findModel($id)->logo);
+            }
             $this->findModel($id)->delete();
             Yii::$app->session->setFlash('success', 'Filme excluído com sucesso.');
         }else{
