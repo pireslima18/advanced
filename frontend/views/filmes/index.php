@@ -1,6 +1,8 @@
 <?php
 
 use frontend\models\Filmes;
+use frontend\models\Categorias;
+use frontend\models\Classificacoes;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
@@ -17,6 +19,11 @@ Icon::map($this);
 
 $this->title = 'Filmes';
 $this->params['breadcrumbs'][] = $this->title;
+
+  
+// echo "<pre>:";
+// print_r($dataProvider);
+// die;
 
 ?>
 <div class="filmes-index">
@@ -73,26 +80,28 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'categoria.nome_categoria',
+                'value' => 'categoria.nome_categoria', // Adicionando esta linha para garantir que a coluna seja exibida corretamente
                 'filter' => Html::activeDropDownList(
                     $searchModel,
                     'categoria_id',
                     ArrayHelper::map(
-                        $searchModel::find()->all(),
-                        'categoria_id',
-                        'categoria.nome_categoria'
+                        Categorias::find()->asArray()->all(),
+                        'id',
+                        'nome_categoria'
                     ),
                     ['class' => 'form-control', 'prompt' => 'Todos']
                 ),
             ],
             [
                 'attribute' => 'classificacao.classificacao',
+                'value' => 'classificacao.classificacao', // Adicionando esta linha para garantir que a coluna seja exibida corretamente
                 'filter' => Html::activeDropDownList(
                     $searchModel,
                     'classificacao_id',
                     ArrayHelper::map(
-                        $searchModel::find()->all(),
-                        'classificacao_id',
-                        'classificacao.classificacao'
+                        Classificacoes::find()->asArray()->all(),
+                        'id',
+                        'classificacao'
                     ),
                     ['class' => 'form-control', 'prompt' => 'Todos']
                 ),
@@ -114,12 +123,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 },
             ],
-            // [
-            //     'class' => ActionColumn::className(),
-            //     'urlCreator' => function ($action, Filmes $model, $key, $index, $column) {
-            //         return Url::toRoute([$action, 'id' => $model->id]);
-            //      }
-            // ],
             [
                 'class' => ActionColumn::className(),
                 'template' => '{edit} {delete}',

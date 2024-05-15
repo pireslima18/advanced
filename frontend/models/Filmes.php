@@ -68,7 +68,7 @@ class Filmes extends \yii\db\ActiveRecord
             'classificacao_id' => 'Classificação',
             'valor_dia' => 'Valor Dia',
             'status' => 'Status',
-            'file' => 'Logo',
+            'file' => 'Capa',
         ];
     }
 

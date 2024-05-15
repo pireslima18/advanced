@@ -50,27 +50,27 @@ use yii\jui\DatePicker;
 <?php
     $script = <<< JS
 
-        $('form#{$model->formName()}').on('beforeSubmit', function(e){
-            var \$form = $(this);
-            $.post(
-                \$form.attr("action"),
-                \$form.serialize()
-            )
-            .done(function(result) {
-                console.log(result);
-                if(result === "Success"){
-                    $(\$form).trigger("reset");
-                    $(document).find('#modalCreate').modal('hide');
-                    $.pjax.reload({container:'#clientesGrid'});
-                }else{
-                    $("#statusError").removeClass('d-none');
-                    $("#statusError").html(result);
-                }
-            }).fail(function(){
-                console.log('Server error');
-            });
-            return false;
-        })
+        // $('form#{$model->formName()}').on('beforeSubmit', function(e){
+        //     var \$form = $(this);
+        //     $.post(
+        //         \$form.attr("action"),
+        //         \$form.serialize()
+        //     )
+        //     .done(function(result) {
+        //         console.log(result);
+        //         if(result === "Success"){
+        //             $(\$form).trigger("reset");
+        //             $(document).find('#modalCreate').modal('hide');
+        //             $.pjax.reload({container:'#clientesGrid'});
+        //         }else{
+        //             $("#statusError").removeClass('d-none');
+        //             $("#statusError").html(result);
+        //         }
+        //     }).fail(function(){
+        //         console.log('Server error');
+        //     });
+        //     return false;
+        // })
 
         $('#telefone').on('input', function (e) {
             var telefone = $(this).val().replace(/\D/g, ''); // Remove todos os caracteres não numéricos

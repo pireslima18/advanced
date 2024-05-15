@@ -61,27 +61,27 @@ use kartik\select2\Select2;
 <?php
     $script = <<< JS
 
-        $('form#{$model->formName()}').on('beforeSubmit', function(e){
-            var \$form = $(this);
-            $.post(
-                \$form.attr("action"),
-                \$form.serialize()
-            )
-            .done(function(result) {
-                console.log(result);
-                if(result === "Success"){
-                    $(\$form).trigger("reset");
-                    $(document).find('#modalCreate').modal('hide');
-                    $.pjax.reload({container:'#alugueisGrid'});
-                }else{
-                    $("#statusError").removeClass('d-none');
-                    $("#statusError").html(result);
-                }
-            }).fail(function(){
-                console.log('Server error');
-            });
-            return false;
-        });
+        // $('form#{$model->formName()}').on('beforeSubmit', function(e){
+        //     var \$form = $(this);
+        //     $.post(
+        //         \$form.attr("action"),
+        //         \$form.serialize()
+        //     )
+        //     .done(function(result) {
+        //         console.log(result);
+        //         if(result === "Success"){
+        //             $(\$form).trigger("reset");
+        //             $(document).find('#modalCreate').modal('hide');
+        //             $.pjax.reload({container:'#alugueisGrid'});
+        //         }else{
+        //             $("#statusError").removeClass('d-none');
+        //             $("#statusError").html(result);
+        //         }
+        //     }).fail(function(){
+        //         console.log('Server error');
+        //     });
+        //     return false;
+        // });
 
     JS;
     $this->registerJs($script);

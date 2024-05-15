@@ -41,13 +41,13 @@ class FilmesSearch extends Filmes
      */
     public function search($params)
     {
-        $query = Filmes::find();
+        $query = Filmes::find()->with('classificacao');
 
         // add conditions that should always apply here
-
+        
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-        ]);        
+        ]);      
 
         $this->load($params);
 
@@ -61,12 +61,16 @@ class FilmesSearch extends Filmes
         $query->andFilterWhere([
             'id' => $this->id,
             'categoria_id' => $this->categoria_id,
-            'classificacao_id' => $this->classificacao_id,
+            // 'classificacao.id' => $this->classificacao_id,
             'valor_dia' => $this->valor_dia,
         ]);
 
         $query->andFilterWhere(['like', 'nome', $this->nome])
             ->andFilterWhere(['like', 'status', $this->status]);
+            
+        $query->joinWith(['classificacao' => function ($query) {
+            $query->filterWhere(['like', 'classificacao.id', $this->classificacao_id]);
+        }]);
 
         return $dataProvider;
     }

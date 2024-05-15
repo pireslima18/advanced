@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use frontend\models\Filmes;
 use frontend\models\FilmesSearch;
 use frontend\models\FilmesAlugados;
+use frontend\models\FilmesDevolvidos;
 use frontend\models\Devolucoes;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -164,9 +165,10 @@ class FilmesController extends Controller
     public function actionDelete($id)
     {
         $filmesAlugadosArray = FilmesAlugados::find()->where(['id_filme'=>$id])->all();
+        $filmesDevolvidosArray = FilmesDevolvidos::find()->where(['id_filme'=>$id])->all();
         $devolucoesArray = Devolucoes::find()->where(['id_filme'=>$id])->all();
 
-        if($this->findModel($id)->status === 'Disponível' && count($filmesAlugadosArray) === 0 && count($devolucoesArray) === 0){
+        if($this->findModel($id)->status === 'Disponível' && count($filmesAlugadosArray) === 0 && count($devolucoesArray) === 0 && count($filmesDevolvidosArray) === 0){
             if($this->findModel($id)->logo !== null){
                 unlink($this->findModel($id)->logo);
             }

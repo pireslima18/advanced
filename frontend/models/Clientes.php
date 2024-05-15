@@ -35,7 +35,7 @@ class Clientes extends \yii\db\ActiveRecord
             [['nome'], 'string', 'max' => 40],
             [['email'], 'string', 'max' => 50],
             [['telefone'], 'string', 'max' => 20],
-            ['data_nascimento', 'checkDate'],
+            [['data_nascimento'], 'checkDate'],
         ];
     }
 
@@ -58,7 +58,7 @@ class Clientes extends \yii\db\ActiveRecord
         $date = DateTime::createFromFormat('d/m/Y', $this->data_nascimento);
         $this->data_nascimento = $date->format('Y-m-d');
         
-        return parent::beforeSave($insert);
+        return true;
     }
 
     public function checkDate($attribute, $params){
@@ -67,7 +67,7 @@ class Clientes extends \yii\db\ActiveRecord
         $diaSelecionado = date('d-m-y', strtotime($this->$attribute));
     
         if($diaSelecionado > $dataAtual){
-            $this->addError($attribute, 'A data de nascimento deve ser posterior à data atual.');
+            $this->addError($attribute, 'A data de nascimento deve ser anterior à data atual.');
         }
     }
 

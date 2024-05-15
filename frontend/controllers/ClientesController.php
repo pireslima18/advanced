@@ -78,9 +78,16 @@ class ClientesController extends Controller
         // }
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($model->load($this->request->post())) {
+                if($model->save()){
+                    echo 'Success';
+                }else{
+                    // foreach ($model->getErrors() as $attribute => $errors) {
+                    //     echo '<br>' . $attribute . ': ' . implode(', ', $errors);
+                    // }
+                    echo "Error";
+                }
                 // return $this->redirect(['view', 'id' => $model->id]);
-                echo 'Success';
             } else {
                 echo 'Error';
                 // return $this->render('create', [

@@ -134,19 +134,38 @@ class AlugueisController extends Controller
 
                 // Salvar objeto no banco de devoluções
                 foreach($idFilmesArray as $idFilme){
+                    echo $idFilme;
                     // echo $id_filme;
                     $objetoFilmesAlugados = new FilmesAlugados();
                     $objetoFilmesAlugados->id_aluguel = $model->id;
                     $objetoFilmesAlugados->id_filme = $idFilme;
 
-                    $objetoFilmesAlugados->save();
+                    if($objetoFilmesAlugados->save()){
+                        echo "ok";
+                    }else{
+                        echo "nada ok";
+                    }
 
                     $objetoCliente->filmes_alugados += 1;
-                    $objetoCliente->save();
+                    if($objetoCliente->save()){
+                        echo "ok";
+                    }else{
+                        echo "nada ok";
+                        foreach ($objetoCliente->getErrors() as $attribute => $errors) {
+                            echo '<br>' . $attribute . ': ' . implode(', ', $errors);
+                        }
+                    }
 
                     $objetoFilme = Filmes::findOne($idFilme);
                     $objetoFilme->status = 'Indisponível';
-                    $objetoFilme->save();
+                    if($objetoFilme->save()){
+                        echo "ok";
+                    }else{
+                        echo "nada ok";
+                        foreach ($objetoFilme->getErrors() as $attribute => $errors) {
+                            echo '<br>' . $attribute . ': ' . implode(', ', $errors);
+                        }
+                    }
                 }
                 // Somar total da lista de filmes alugados do cliente
 

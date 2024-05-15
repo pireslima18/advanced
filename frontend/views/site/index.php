@@ -52,7 +52,7 @@ $imageUrl = Url::to('@web/uploads/images.jpg');
                         <p>Categoria: Ação</p>
                         <p>Classificação: L</p>
                         <p>Valor diária: R$ 10.45</p>
-                        <a href="#" class="btn btn-primary">Alugar</a>
+                        <!-- <a href="#" class="btn btn-primary">Alugar</a> -->
                     </div>
                 </div>
             </div>

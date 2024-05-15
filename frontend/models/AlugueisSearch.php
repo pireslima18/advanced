@@ -42,9 +42,7 @@ class AlugueisSearch extends Alugueis
      */
     public function search($params)
     {
-        $query = Alugueis::find()->alias('aluguel')->joinWith([
-            'filmes filme'
-        ]);
+        $query = Alugueis::find()->alias('aluguel');
 
         // add conditions that should always apply here
 
