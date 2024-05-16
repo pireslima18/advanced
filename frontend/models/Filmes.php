@@ -40,7 +40,7 @@ class Filmes extends \yii\db\ActiveRecord
             [['status'], 'string'],
             [['nome'], 'string', 'max' => 40],
             [['logo'], 'string', 'max' => 200],
-            [['file'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg'],
+            [['file'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
             [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categorias::class, 'targetAttribute' => ['categoria_id' => 'id']],
             [['classificacao_id'], 'exist', 'skipOnError' => true, 'targetClass' => Classificacoes::class, 'targetAttribute' => ['classificacao_id' => 'id']],
         ];

@@ -55,19 +55,50 @@ class Clientes extends \yii\db\ActiveRecord
     }
 
     public function beforeSave($insert) {
-        $date = DateTime::createFromFormat('d/m/Y', $this->data_nascimento);
+        // $format = checkDateFormat($this->data_nascimento);
+        $format = 0;
+    
+        if (preg_match('/^\d{2}-\d{2}-\d{4}$/', $this->data_nascimento)) {
+            $format = 'd-m-Y';
+        } elseif (preg_match('/^\d{4}-\d{2}-\d{2}$/', $this->data_nascimento)) {
+            $format = 'Y-m-d';
+        } elseif (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $this->data_nascimento)) {
+            $format = 'd/m/Y';
+        } else {
+            $format = false;
+        }
+
+        $date = DateTime::createFromFormat($format, $this->data_nascimento);
         $this->data_nascimento = $date->format('Y-m-d');
         
         return true;
     }
 
     public function checkDate($attribute, $params){
-        $dataAtual = date('d-m-y');
-        $dataAtual;
-        $diaSelecionado = date('d-m-y', strtotime($this->$attribute));
+        $format = false;
     
-        if($diaSelecionado > $dataAtual){
-            $this->addError($attribute, 'A data de nascimento deve ser anterior à data atual.');
+        if (preg_match('/^\d{2}-\d{2}-\d{4}$/', $this->$attribute)) {
+            $format = 'd-m-Y';
+        } elseif (preg_match('/^\d{4}-\d{2}-\d{2}$/', $this->$attribute)) {
+            $format = 'Y-m-d';
+        } elseif (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $this->$attribute)) {
+            $format = 'd/m/Y';
+        }
+    
+        if ($format) {
+            $dateTime = DateTime::createFromFormat($format, $this->$attribute);
+            if ($dateTime && $dateTime->format($format) === $this->$attribute) {
+                $diaSelecionado = $dateTime->format('Y-m-d');
+                $dataAtual = date('Y-m-d');
+                
+                if($diaSelecionado > $dataAtual){
+                    $this->addError($attribute, 'A data de nascimento deve ser anterior à data atual.');
+                }
+            } else {
+                echo "Data inválida";
+            }
+        } else {
+            echo "Formato de data inválido";
         }
     }
 

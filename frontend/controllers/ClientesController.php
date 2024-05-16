@@ -119,6 +119,7 @@ class ClientesController extends Controller
                 echo 'Success';
             }else{
                 Yii::$app->session->setFlash('error', implode(', ', $model->getFirstErrors()));
+                echo('Error');
                 // echo 'Error';
             }
         }else{

@@ -91,7 +91,6 @@ class FilmesController extends Controller
         //     Yii::$app->response->format = Response::FORMAT_JSON;;
         //     return ActiveForm::validate($model);
         // }
-
         
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) /*&& $model->save()*/) {
@@ -136,7 +135,8 @@ class FilmesController extends Controller
             if ($model->load($this->request->post()) /*&& $model->save()*/) {
                 $model->file = UploadedFile::getInstance($model, 'file');
                 $imageName = $model->nome;
-                if($model->file->saveAs('uploads/' . $imageName . '.' . $model->file->extension, false)){
+
+                if($_FILES['Filmes']['name']['file'] != null && $model->file->saveAs('uploads/' . $imageName . '.' . $model->file->extension, false)){
                     $model->logo = 'uploads/' . $imageName . '.' . $model->file->extension;
                 }
                 if($model->save()){

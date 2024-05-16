@@ -10,16 +10,17 @@ use yii\jui\DatePicker;
 ?>
 
 
-<div class="clientes-form">
 
-    <?php $form = ActiveForm::begin(['id'=>$model->formName()]); ?>
+<div class="clientes-form">
     
-    <?php if (Yii::$app->session->hasFlash('error')): ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <?= Yii::$app->session->getFlash('error') ?>
+    <?php if (true): ?>
+        <div class="alert alert-danger alert-dismissible fade show d-none" role="alert" id="alertErro">
+            <?= Yii::$app->session->getFlash('error') ? Yii::$app->session->getFlash('error') : 'Erro' ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
+    
+    <?php $form = ActiveForm::begin(['id'=>$model->formName()]); ?>
 
     <?= $form->field($model, 'nome')->textInput(['maxlength' => true, 'autocomplete' => 'off']); ?>
 
@@ -50,27 +51,27 @@ use yii\jui\DatePicker;
 <?php
     $script = <<< JS
 
-        // $('form#{$model->formName()}').on('beforeSubmit', function(e){
-        //     var \$form = $(this);
-        //     $.post(
-        //         \$form.attr("action"),
-        //         \$form.serialize()
-        //     )
-        //     .done(function(result) {
-        //         console.log(result);
-        //         if(result === "Success"){
-        //             $(\$form).trigger("reset");
-        //             $(document).find('#modalCreate').modal('hide');
-        //             $.pjax.reload({container:'#clientesGrid'});
-        //         }else{
-        //             $("#statusError").removeClass('d-none');
-        //             $("#statusError").html(result);
-        //         }
-        //     }).fail(function(){
-        //         console.log('Server error');
-        //     });
-        //     return false;
-        // })
+        $('form#{$model->formName()}').on('beforeSubmit', function(e){
+            var \$form = $(this);
+            $.post(
+                \$form.attr("action"),
+                \$form.serialize()
+            )
+            .done(function(result) {
+                console.log(result);
+                if(result === "Success"){
+                    $(\$form).trigger("reset");
+                    $(document).find('#modalCreate').modal('hide');
+                    $.pjax.reload({container:'#clientesGrid'});
+                }else if (result === "Error"){
+                    $("#alertErro").removeClass('d-none');
+                } else{
+                }
+            }).fail(function(){
+                console.log('Server error');
+            });
+            return false;
+        })
 
         $('#telefone').on('input', function (e) {
             var telefone = $(this).val().replace(/\D/g, ''); // Remove todos os caracteres não numéricos

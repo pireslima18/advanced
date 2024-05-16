@@ -134,40 +134,19 @@ class AlugueisController extends Controller
 
                 // Salvar objeto no banco de devoluções
                 foreach($idFilmesArray as $idFilme){
-                    echo $idFilme;
-                    // echo $id_filme;
                     $objetoFilmesAlugados = new FilmesAlugados();
                     $objetoFilmesAlugados->id_aluguel = $model->id;
                     $objetoFilmesAlugados->id_filme = $idFilme;
 
-                    if($objetoFilmesAlugados->save()){
-                        echo "ok";
-                    }else{
-                        echo "nada ok";
-                    }
+                    $objetoFilmesAlugados->save();
 
                     $objetoCliente->filmes_alugados += 1;
-                    if($objetoCliente->save()){
-                        echo "ok";
-                    }else{
-                        echo "nada ok";
-                        foreach ($objetoCliente->getErrors() as $attribute => $errors) {
-                            echo '<br>' . $attribute . ': ' . implode(', ', $errors);
-                        }
-                    }
+                    $objetoCliente->save();
 
                     $objetoFilme = Filmes::findOne($idFilme);
                     $objetoFilme->status = 'Indisponível';
-                    if($objetoFilme->save()){
-                        echo "ok";
-                    }else{
-                        echo "nada ok";
-                        foreach ($objetoFilme->getErrors() as $attribute => $errors) {
-                            echo '<br>' . $attribute . ': ' . implode(', ', $errors);
-                        }
-                    }
+                    $objetoFilme->save();
                 }
-                // Somar total da lista de filmes alugados do cliente
 
                 // return $this->redirect(['view', 'id' => $model->id]);
                 echo 'Success';
@@ -221,8 +200,11 @@ class AlugueisController extends Controller
         $filmesAlugadosArray = FilmesAlugados::find()->where(['id_aluguel' => $id])->all();
         foreach($filmesAlugadosArray as $filmeAlugado){
             // Retirar filme do cliente
-            $objetoCliente->filmes_alugados -= 1;
-            $objetoCliente->save();
+            if($objetoCliente->filmes_alugados > 0){
+                $objetoCliente->filmes_alugados -= 1;
+                $objetoCliente->save();
+            }
+            
             // Alterar status do filme
             $objetoFilme = Filmes::findOne($filmeAlugado->id_filme);
             $objetoFilme->status = 'Disponível';
