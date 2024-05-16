@@ -8,6 +8,10 @@ $this->title = 'My Yii Application';
 
 $imageUrl = Url::to('@web/uploads/images.jpg');
 
+// echo "<pre>";
+// print_r($filmesModel);
+// die;
+
 ?>
 
 <style>
@@ -23,6 +27,14 @@ $imageUrl = Url::to('@web/uploads/images.jpg');
         position: absolute;
         bottom: 10px;
         right: 10px;
+    }
+    .statusFilme{
+        width: 100%;
+        padding: 0;
+        font-size: 16px
+    }
+    .statusFilme p{
+        height: 25px;
     }
 </style>
 
@@ -47,10 +59,19 @@ $imageUrl = Url::to('@web/uploads/images.jpg');
                             <img src="<?= Url::to('@web/' . $filme->classificacao->imagem_classificacao) ?>" class="img-fluid" alt="<?= $filme->nome ?>">
                         </div>
                     </div>
+
+                    <div class="statusFilme">
+                        <?php if($filme->status == 'Indisponível'){?>
+                            <p class="text-center rounded-bottom text-white bg-danger fw-bold fst-italic">Indisponivel</p>
+                        <?php } ?>
+                        <?php if($filme->status == 'Disponível'){?>
+                            <p class="text-center rounded-bottom text-white bg-success fw-bold fst-italic">Disponivel</p>
+                        <?php } ?>    
+                    </div>
+
                     <div class="card-body">
                         <h5 class="card-title"><?= $filme->nome ?></h5>
                         <p>Categoria: Ação</p>
-                        <p>Classificação: L</p>
                         <p>Valor diária: R$ 10.45</p>
                         <!-- <a href="#" class="btn btn-primary">Alugar</a> -->
                     </div>
