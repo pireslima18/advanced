@@ -11,6 +11,7 @@ use yii\grid\GridView;
 use yii\bootstrap5\Modal;
 use yii\widgets\Pjax;
 use kartik\icons\Icon;
+use kartik\select2\Select2;
 Icon::map($this);
 
 /** @var yii\web\View $this */
@@ -64,34 +65,47 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             [
                 'attribute' => 'nome',
-                'filter' => Html::activeDropDownList(
-                    $searchModel,
-                    'nome',
-                    ArrayHelper::map(
-                        Filmes::find()->all(),
-                        'nome',
-                        'nome'
-                    ),
-                    ['class' => 'form-control', 'prompt' => 'Todos']
-                ),
+                'filter' => Select2::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'nome',
+                    'data' => ArrayHelper::map(Filmes::find()->select(['nome'])->distinct()->all(), 'nome', 'nome'),
+                    'language' => 'pt',
+                    'options' => ['placeholder' => 'Selecione um nome ...'],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                    ],
+                ]),
             ],
             [
                 'attribute' => 'categoria.nome_categoria',
-                'value' => 'categoria.nome_categoria', // Adicionando esta linha para garantir que a coluna seja exibida corretamente
-                'filter' => Html::activeDropDownList(
-                    $searchModel,
-                    'categoria_id',
-                    ArrayHelper::map(
+                'value' => 'categoria.nome_categoria', // Garantindo que a coluna seja exibida corretamente
+                'filter' => Select2::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'categoria_id',
+                    'data' => ArrayHelper::map(
                         Categorias::find()->asArray()->all(),
                         'id',
                         'nome_categoria'
                     ),
-                    ['class' => 'form-control', 'prompt' => 'Todos']
-                ),
+                    'language' => 'pt',
+                    'options' => [
+                        'placeholder' => 'Selecionar Categoria',
+                        'multiple' => false,
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'closeOnSelect' => false,
+                        'tokenSeparators' => [','],
+                        // 'language' => [
+                        //     'noResults' => new \yii\web\JsExpression("function () { return 'Nenhum resultado encontrado'; }"),
+                        // ],
+                    ],
+                ]),
             ],
+
+
             [
                 'attribute' => 'classificacao.classificacao',
                 'value' => 'classificacao.classificacao', // Adicionando esta linha para garantir que a coluna seja exibida corretamente
